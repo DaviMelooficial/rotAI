@@ -1,8 +1,8 @@
-"""Adicionado banco completo
+"""Recriando banco de dados
 
-Revision ID: b0dd51fc1f03
+Revision ID: b80d46c8502a
 Revises: 
-Create Date: 2024-12-04 14:33:44.206140
+Create Date: 2024-12-04 23:42:14.688635
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b0dd51fc1f03'
+revision = 'b80d46c8502a'
 down_revision = None
 branch_labels = None
 depends_on = None

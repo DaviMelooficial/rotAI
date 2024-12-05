@@ -5,7 +5,10 @@ from flask_wtf import CSRFProtect
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 from config import Config
+from flask_mail import Mail, Message
 import requests
+import random
+import string
 import json
 import os
 
@@ -16,6 +19,15 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 csrf = CSRFProtect(app)
+
+# Configuração de envio de e-mail
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME') 
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER', 'noreply@rota.com')
+mail = Mail(app)
 
 # Modelo de Usuário
 class User(db.Model):
@@ -51,6 +63,11 @@ class PontoTuristico(db.Model):
     longitude = db.Column(db.Float, nullable=False)
     rota_id = db.Column(db.Integer, db.ForeignKey('rota.id'), nullable=False)
     rota = db.relationship('Rota', backref=db.backref('pontos_turisticos', lazy=True))
+
+# Gera uma senha temporária
+def gerar_senha_temp(tamanho=8):
+    caracteres = string.ascii_letters + string.digits
+    return ''.join(random.choice(caracteres) for _ in range(tamanho))
 
 # Página inicial
 @app.route('/')
@@ -97,6 +114,45 @@ def cadastro():
         return redirect(url_for('login'))
 
     return render_template('cadastro.html')
+
+
+# Esqueci minha senha
+@app.route('/esqueci-senha', methods=['GET', 'POST'])
+def esqueci_senha():
+    if request.method == 'POST':
+        email = request.form.get('email').strip()
+        user = User.query.filter_by(email=email).first()
+
+        if user:
+            nova_senha = gerar_senha_temp()
+            user.set_password(nova_senha)
+            db.session.commit()
+
+            # Enviar a nova senha por e-mail
+            try:
+                msg = Message(
+                    'Redefinição de Senha - RotA.I',
+                    recipients=[email]
+                )
+                msg.body = f"""
+                Olá {user.nome},
+
+                Sua nova senha temporária é: {nova_senha}
+
+                Por favor, use-a para acessar sua conta e altere-a assim que possível.
+
+                Equipe RotA.I
+                """
+                mail.send(msg)
+                flash('Uma nova senha foi enviada para seu e-mail.', 'success')
+            except Exception as e:
+                flash(f'Erro ao enviar o e-mail: {e}', 'danger')
+                return redirect(url_for('esqueci_senha'))
+
+        else:
+            flash('E-mail não encontrado.', 'danger')
+
+    return render_template('esqueci_senha.html')
 
 # Página principal
 @app.route('/main')
