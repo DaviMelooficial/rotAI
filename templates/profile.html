@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - RotA.I</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 bg-light vh-100 d-flex flex-column align-items-center py-4">
+                <a href="{{ url_for('main') }}">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="RotA.I Logo" class="img-fluid mb-3" style="max-width: 150px;">
+                </a>
+                <hr>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ url_for('profile') }}">
+                            <div class="selected">
+                                <i class="fas fa-user"></i> Sua Conta
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ url_for('duvidas') }}">
+                            <i class="fas fa-question-circle"></i> Dúvidas
+                        </a>
+                    </li>
+                </ul>
+            </div>            
+            <!-- Main Content -->
+            <div class="col-md-10 py-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <h3>Minhas Rotas</h3>
+                        <p>Rotas que você criou ou interagiu!</p>
+                    </div>
+                    <!-- Accordion for Rotas -->
+                    <div class="accordion" id="rotasAccordion">
+                        {% for rota in minhas_rotas %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ rota.id }}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ rota.id }}" aria-expanded="false" aria-controls="collapse{{ rota.id }}">
+                                    Rota {{ loop.index }}: {{ rota.descricao }}
+                                </button>
+                            </h2>
+                            <div id="collapse{{ rota.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ rota.id }}" data-bs-parent="#rotasAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Descrição:</strong> {{ rota.descricao }}</p>
+                                    <p><strong>Criado em:</strong> {{ rota.criado_em.strftime('%d/%m/%Y') }}</p>
+                                    <a href="{{ url_for('visualizar_rota', rota_id=rota.id) }}" class="btn btn-info">
+                                        <i class="fas fa-map-marked-alt"></i> Ver Rota
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Load More Button -->
+                    <div class="text-center my-3">
+                        <button id="loadMore" class="btn btn-primary" data-offset="{{ limit }}">Carregar mais</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('loadMore').addEventListener('click', function () {
+            const button = this;
+            const offset = button.getAttribute('data-offset');
+            const url = `/profile?json=1&offset=${offset}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const accordion = document.getElementById('rotasAccordion');
+                    data.forEach((rota, index) => {
+                        const cardIndex = parseInt(offset) + index + 1;
+                        const accordionItem = `
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="heading${rota.id}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${rota.id}" aria-expanded="false" aria-controls="collapse${rota.id}">
+                                        Rota ${cardIndex}: ${rota.descricao}
+                                    </button>
+                                </h2>
+                                <div id="collapse${rota.id}" class="accordion-collapse collapse" aria-labelledby="heading${rota.id}" data-bs-parent="#rotasAccordion">
+                                    <div class="accordion-body">
+                                        <p><strong>Descrição:</strong> ${rota.descricao}</p>
+                                        <p><strong>Criado em:</strong> ${rota.criado_em}</p>
+                                        <a href="/rota/${rota.id}" class="btn btn-info">
+                                            <i class="fas fa-map-marked-alt"></i> Ver Rota
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>`;
+                        accordion.insertAdjacentHTML('beforeend', accordionItem);
+                    });
+
+                    // Update the offset for the next batch
+                    button.setAttribute('data-offset', parseInt(offset) + data.length);
+
+                    // Hide the button if no more routes are available
+                    if (data.length < {{ limit }}) {
+                        button.style.display = 'none';
+                    }
+                })
+                .catch(error => console.error('Erro ao carregar mais rotas:', error));
+        });
+    </script>
+</body>
+</html>

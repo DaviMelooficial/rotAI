@@ -1,0 +1,58 @@
+/* Fundo da página */
+body {
+    font-family: 'Arial', sans-serif;
+    background: url('../img/Fundo.png') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(0, 0, 0);
+    margin: 0; 
+    padding: 0; 
+}
+
+/* Estilização conteiners SideBar */
+.navbar-left {
+    border-left: 6px solid rgb(0, 0, 0);
+    background-color: #353637; 
+    display: inline-block; 
+}
+
+.nav-link:hover {
+    background-color: #ffb826;
+}
+
+.carousel img {
+    object-fit: cover; 
+    opacity: 0.8;
+}
+
+.carousel-inner,
+.carousel-item {
+    height: 100%;  
+}
+
+.card-body {
+    position: relative;
+}
+
+.h3{
+    font-family: 'Roboto', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    color: rgb(255, 255, 255);                         
+    -webkit-text-stroke: 1px #000000;        
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);  
+}
+
+.p{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.5rem;
+    color: rgb(255, 255, 255);                        
+    -webkit-text-stroke: 1px #000000;       
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);  
+    line-height: 1.6;                
+    margin-bottom: 20px;
+    font-weight: bold;
+}

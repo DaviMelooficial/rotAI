@@ -1,0 +1,160 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fundo da página */
+body {
+    font-family: 'Arial', sans-serif;
+    background: url('../img/map-background.png') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+/* Container principal */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+/* Estilização do formulário */
+.form-container {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.form-container h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.form-container p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    color: #bbb;
+}
+
+/* Campos de entrada */
+.form-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    background: #f0f0f0;
+    color: #333;
+}
+
+.form-container input:focus {
+    outline: none;
+    border: 2px solid #007BFF;
+}
+
+/* Botão de enviar */
+.form-container button {
+    width: 100%;
+    padding: 10px;
+    background: black;
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.form-container button:hover {
+    background: #007BFF;
+}
+
+/* Grupo de checkboxes */
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    gap: 10px;
+}
+
+/* Cada label no grupo */
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    cursor: pointer;
+    width: 100%;
+    max-width: 300px; 
+    padding: 10px;
+    background: #ecf0f1;
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.2s, color 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Esconde o checkbox padrão */
+.checkbox-group input[type="checkbox"] {
+    display: none;
+}
+
+/* Estilo do texto quando não selecionado */
+.checkbox-group span {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Efeito ao passar o mouse */
+.checkbox-group label:hover {
+    transform: scale(1.03);
+}
+
+/* Estilo do checkbox selecionado*/
+.checkbox-group input[type="checkbox"]:checked + span {
+    background: #ffb826; 
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para pintar toda a label */
+.checkbox-group input[type="checkbox"]:checked + span:hover {
+    background: #ff9900;
+}
+
+/* Flash messages */
+.flash-messages {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.flash-message {
+    padding: 10px;
+    color: #fff;
+    font-weight: bold;
+}
+.flash-message.success {
+    background-color: #4caf50;
+}
+
+.flash-message.danger {
+    background-color: #f44336;
+}
+
+.flash-message.info {
+    background-color: #2196f3; 
+}

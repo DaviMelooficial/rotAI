@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerar Rota</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/gerar_rota.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>ROTAI</h1>
+            <p>Informe suas preferências para gerar sua rota inteligente</p>
+            <form id="rotaForm">
+                <!-- CSRF Token -->
+                <input type="hidden" id="csrf_token" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="text" id="ponto_partida" name="ponto_partida" placeholder="Ponto de partida" required>
+                <input type="text" id="destino_principal" name="destino_principal" placeholder="Destino principal" required>
+                <label for="interesses">Selecione seus interesses turísticos:</label>
+                <p></p>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" value="restaurant" name="interesses">
+                        <span>Restaurantes</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" value="museum" name="interesses">
+                        <span>Museus</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" value="park" name="interesses">
+                        <span>Parques</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" value="shopping_mall" name="interesses">
+                        <span>Shoppings</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" value="tourist_attraction" name="interesses">
+                        <span>Atrações Turísticas</span>
+                    </label>
+                </div>
+                <div>
+                    <p>
+                    </p>
+                </div>                             
+                <button type="submit">Gerar Rota</button>
+            </form>            
+        </div>
+    </div>
+    <script>
+        document.getElementById('rotaForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); 
+
+            const pontoPartida = document.getElementById('ponto_partida').value.trim();
+            const destino = document.getElementById('destino_principal').value.trim();
+            const csrfToken = document.getElementById('csrf_token').value;
+
+            if (!pontoPartida || !destino) {
+                alert("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            try {
+                const response = await fetch('/buscar-pontos-turisticos', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        ponto_partida: pontoPartida,
+                        destino_principal: destino
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    window.location.href = `/rota/${data.rota_id}`;
+                } else {
+                    const errorData = await response.json();
+                    alert(errorData.error || 'Erro ao gerar a rota.');
+                }
+            } catch (error) {
+                console.error('Erro na requisição:', error);
+                alert('Erro inesperado. Tente novamente.');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+/* Ajuste das imagens de fundo */
+.login-image, .register-image {
+    height: 100%;
+    width: 100%;
+}
+
+/* Estilo do texto centralizado */
+.text-center h1, 
+.text-center p, 
+.text-center h2 {
+    text-align: center;
+}
+
+/* Ícones de entrada */
+.input-icon {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    color: #6c757d;
+}
+
+/* Botões */
+button {
+    font-weight: bold;
+    background-color: #0069d9;
+    border: none;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+a {
+    text-decoration: none;
+    color: #0069d9;
+}
+
+a:hover {
+    text-decoration: underline;
+}
