@@ -1,5 +1,7 @@
 # RotA.I - Projeto de Geração de Rotas Turísticas Inteligentes
 
+link de acesso: https://bit.ly/rotAI
+
 Descrição do Projeto
 O RotA.I é uma aplicação web projetada para auxiliar usuários a criarem rotas turísticas personalizadas e interativas, com base em seus pontos de partida e destinos principais. A aplicação oferece uma experiência imersiva que combina a simplicidade de uso com a inteligência de APIs modernas, permitindo que os usuários explorem pontos turísticos relevantes no caminho para seus destinos.
 
